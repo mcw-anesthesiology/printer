@@ -1,0 +1,10 @@
+{
+	"version": 2,
+	"scope": "mcw-anesth",
+	"alias": [
+		"printer.mcw-anesth.tech"
+	],
+	"builds": [
+		{ "src": "*.js", "use": "@now/node", "config": { "maxLambdaSize": "40mb" } }
+	]
+}
