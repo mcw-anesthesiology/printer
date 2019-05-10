@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "dev": "NODE_ENV=development now dev"
+  },
   "dependencies": {
     "body": "^5.1.0",
     "chrome-aws-lambda": "^1.15.1",
