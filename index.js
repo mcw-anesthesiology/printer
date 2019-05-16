@@ -13,22 +13,27 @@ const ALLOWED_ORIGINS = [
 	/\.mcwanet\.com/
 ];
 
-
 module.exports = (req, res) =>
-	jsonBody(req, res, async (err, { body, styles = [] }) => {
+	jsonBody(req, res, async (err, { body, styles = [], options = {} }) => {
 		try {
 			if (err) throw err;
 
 			if (NODE_ENV === 'development') {
 				res.setHeader('Access-Control-Allow-Origin', '*');
 			} else {
-				if (ALLOWED_ORIGINS.some(origin => origin.test(req.headers.origin))) {
-					res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
+				if (
+					ALLOWED_ORIGINS.some(origin =>
+						origin.test(req.headers.origin)
+					)
+				) {
+					res.setHeader(
+						'Access-Control-Allow-Origin',
+						req.headers.origin
+					);
 				} else {
 					throw new Error('Disallowed origin');
 				}
 			}
-
 
 			const browser = await puppeteer.launch({
 				args: chrome.args,
@@ -47,13 +52,13 @@ module.exports = (req, res) =>
 			);
 			const pdf = await page.pdf({
 				format: 'Letter',
-				landscape: true,
 				margin: {
 					top: '0.5in',
 					right: '0.5in',
 					bottom: '0.5in',
-					left: '0.5in',
-				}
+					left: '0.5in'
+				},
+				...options
 			});
 
 			await browser.close();
