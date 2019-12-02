@@ -50,6 +50,15 @@ module.exports = (req, res) =>
 					})
 				)
 			);
+
+			// Sleep for a couple seconds to let resources load
+			// Not ideal way to do this but good enough for now.
+			await new Promise(resolve => {
+				setTimeout(() => {
+					resolve();
+				}, 2000);
+			});
+
 			const pdf = await page.pdf({
 				format: 'Letter',
 				margin: {
