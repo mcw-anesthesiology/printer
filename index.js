@@ -42,22 +42,15 @@ module.exports = (req, res) =>
 			});
 
 			const page = await browser.newPage();
-			await page.setContent(body);
-			await Promise.all(
-				styles.map(style =>
+			await Promise.all([
+				page.setContent(body),
+				...styles.map(style =>
 					page.addStyleTag(style).catch(err => {
 						console.error(err);
 					})
-				)
-			);
-
-			// Sleep for a couple seconds to let resources load
-			// Not ideal way to do this but good enough for now.
-			await new Promise(resolve => {
-				setTimeout(() => {
-					resolve();
-				}, 2000);
-			});
+				),
+				new Promise(resolve => page.once('load', resolve))
+			]);
 
 			const pdf = await page.pdf({
 				format: 'Letter',
