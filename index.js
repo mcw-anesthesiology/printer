@@ -49,7 +49,8 @@ module.exports = (req, res) =>
 						console.error(err);
 					})
 				),
-				new Promise(resolve => page.once('load', resolve))
+				new Promise(resolve => page.once('load', resolve)),
+				new Promise(resolve => setTimeout(resolve, 2000))
 			]);
 
 			const pdf = await page.pdf({
