@@ -6,6 +6,9 @@
   "scripts": {
     "dev": "NODE_ENV=development now dev"
   },
+  "engines": {
+    "node": "12.x"
+  },
   "dependencies": {
     "body": "^5.1.0",
     "chrome-aws-lambda": "^1.15.1",
