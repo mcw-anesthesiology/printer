@@ -2,7 +2,6 @@
 
 const jsonBody = require('body/json');
 const chrome = require('chrome-aws-lambda');
-const puppeteer = require('puppeteer-core');
 
 const { NODE_ENV } = process.env;
 
@@ -10,7 +9,7 @@ const ALLOWED_ORIGINS = [
 	/\.residentprogram\.com/,
 	/\.mcw-anesthesiology\.tech/,
 	/\.mcw-anesth\.tech/,
-	/\.mcwanet\.com/
+	/\.mcwanet\.com/,
 ];
 
 module.exports = (req, res) =>
@@ -35,10 +34,12 @@ module.exports = (req, res) =>
 				}
 			}
 
-			const browser = await puppeteer.launch({
+			const browser = await chrome.puppeteer.launch({
 				args: chrome.args,
+				defaultViewport: chrome.defaultViewport,
 				executablePath: await chrome.executablePath,
-				headless: chrome.headless
+				headless: chrome.headless,
+				ignoreHTTPSErrors: true,
 			});
 
 			const page = await browser.newPage();
@@ -50,7 +51,7 @@ module.exports = (req, res) =>
 					})
 				),
 				new Promise(resolve => page.once('load', resolve)),
-				new Promise(resolve => setTimeout(resolve, 2000))
+				new Promise(resolve => setTimeout(resolve, 2000)),
 			]);
 
 			const pdf = await page.pdf({
@@ -59,9 +60,9 @@ module.exports = (req, res) =>
 					top: '0.5in',
 					right: '0.5in',
 					bottom: '0.5in',
-					left: '0.5in'
+					left: '0.5in',
 				},
-				...options
+				...options,
 			});
 
 			await browser.close();

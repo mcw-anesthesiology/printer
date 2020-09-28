@@ -1,18 +1,18 @@
 {
-  "name": "printer",
-  "version": "1.0.0",
-  "main": "index.js",
-  "license": "MIT",
-  "scripts": {
-    "dev": "NODE_ENV=development now dev"
-  },
-  "engines": {
-    "node": "12.x"
-  },
-  "dependencies": {
-    "body": "^5.1.0",
-    "chrome-aws-lambda": "^2.0.2",
-    "iltorb": "^2.4.4",
-    "puppeteer-core": "^2.0.0"
-  }
+	"name": "printer",
+	"version": "1.0.0",
+	"main": "index.js",
+	"license": "MIT",
+	"scripts": {
+		"dev": "NODE_ENV=development now dev"
+	},
+	"engines": {
+		"node": "12.x"
+	},
+	"dependencies": {
+		"body": "^5.1.0",
+		"chrome-aws-lambda": "^5.3.1",
+		"iltorb": "^2.4.4",
+		"puppeteer-core": "^5.3.1"
+	}
 }
