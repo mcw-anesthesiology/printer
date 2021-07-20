@@ -3,16 +3,12 @@
 	"version": "1.0.0",
 	"main": "index.js",
 	"license": "MIT",
-	"scripts": {
-		"dev": "NODE_ENV=development now dev"
-	},
-	"engines": {
-		"node": "12.x"
-	},
 	"dependencies": {
 		"body": "^5.1.0",
-		"chrome-aws-lambda": "^5.3.1",
-		"iltorb": "^2.4.4",
-		"puppeteer-core": "^5.3.1"
+		"chrome-aws-lambda": "^10.1.0",
+		"puppeteer-core": "^10.1.0"
+	},
+	"devDependencies": {
+		"puppeteer": "^10.1.0"
 	}
 }

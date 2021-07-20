@@ -3,34 +3,23 @@
 const jsonBody = require('body/json');
 const chrome = require('chrome-aws-lambda');
 
-const { NODE_ENV } = process.env;
-
-const ALLOWED_ORIGINS = [
-	/\.residentprogram\.com/,
-	/\.mcw-anesthesiology\.tech/,
-	/\.mcw-anesth\.tech/,
-	/\.mcwanet\.com/,
-];
+const { ALLOWED_ORIGINS = '*', NODE_ENV } = process.env;
 
 module.exports = (req, res) =>
 	jsonBody(req, res, async (err, { body, styles = [], options = {} }) => {
 		try {
 			if (err) throw err;
 
-			if (NODE_ENV === 'development') {
+			if (NODE_ENV === 'development' || ALLOWED_ORIGINS === '*') {
 				res.setHeader('Access-Control-Allow-Origin', '*');
 			} else {
-				if (
-					ALLOWED_ORIGINS.some(origin =>
-						origin.test(req.headers.origin)
-					)
-				) {
+				if (RegExp(ALLOWED_ORIGINS).test(req.headers.origin)) {
 					res.setHeader(
 						'Access-Control-Allow-Origin',
 						req.headers.origin
 					);
 				} else {
-					throw new Error('Disallowed origin');
+					throw new CorsError();
 				}
 			}
 
@@ -38,7 +27,7 @@ module.exports = (req, res) =>
 				args: chrome.args,
 				defaultViewport: chrome.defaultViewport,
 				executablePath: await chrome.executablePath,
-				headless: chrome.headless,
+				headless: true,
 				ignoreHTTPSErrors: true,
 			});
 
@@ -72,8 +61,14 @@ module.exports = (req, res) =>
 			res.end(pdf);
 		} catch (err) {
 			console.error(err);
-			res.statusCode = 500;
+			res.statusCode = err instanceof CorsError ? 403 : 500;
 			res.end();
 			return;
 		}
 	});
+
+class CorsError extends Error {
+	constructor(...params) {
+		super('Disallowed origin', ...params);
+	}
+}
